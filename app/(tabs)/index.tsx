@@ -2,8 +2,18 @@ import { Text, View } from "react-native";
 
 export default function Index() {
   return (
-    <View className="justify-center flex-1 items-center">
-      <Text className="font-bold text-5xl color-blue-500">Home Page</Text>
+    <View className="justify-center items-center flex-1 bg-black">
+        <View className="w-[22em] h-[16em] bg-[#0f0D23] mb-[12em] rounded-full justify-center items-center">
+          <Text className="color-white font-bold text-2xl">Bluetooth holder</Text>
+        </View>
+        <View className="w-[22rem] h-[2.5em] bg-[#0f0D23] rounded-full mb-[16em] flex-row items-center justify-center">
+          <Text className="color-white font-bold">
+            Mode 1
+          </Text>
+          <Text className="color-white font-bold ml-12">
+            Mode 2
+          </Text>
+        </View>   
     </View>
   );
 }

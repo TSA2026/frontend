@@ -1,7 +1,7 @@
 import data_c from './images/data_c.png';
 import data_u from './images/Data_u.png';
-import home_u from './images/Home_u.png';
 import home_c from './images/Home_c.png';
+import home_u from './images/Home_u.png';
 import settings_c from './images/settings_c.png';
 import settings_u from './images/Settings_u.png';
 
@@ -11,5 +11,5 @@ export const assets = {
     home_u,
     home_c,
     settings_c,
-    settings_u
+    settings_u,
 }
