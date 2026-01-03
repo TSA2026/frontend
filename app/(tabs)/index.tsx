@@ -1,13 +1,13 @@
 import Slider from "@react-native-community/slider";
 import { useState } from "react";
-import { Text, View, } from "react-native";
+import { Text, View } from "react-native";
 
 export default function Index() {
 
   const [value, setValue] = useState(50);
 
   return (
-    <View className="justify-center items-center bg-black">
+    <View className="items-center flex-1 bg-black">
         <View className="w-[22em] h-[16em] bg-[#0f0D23] mb-[12em] mt-[6em] rounded-full justify-center items-center">
           <Text className="color-white font-bold text-2xl">Bluetooth holder</Text>
         </View>
@@ -24,7 +24,6 @@ export default function Index() {
             Value: {value.toFixed(0)}
           </Text>
           <Slider
-            style={{ width: '100%', height: 40 }}
             minimumValue={0}
             maximumValue={100}
             value={value}
