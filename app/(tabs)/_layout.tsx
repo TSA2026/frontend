@@ -1,17 +1,17 @@
+import { assets } from "@/assets/assets.js";
 import { images } from "@/constants/images";
 import { Tabs } from "expo-router";
-import React from "react";
 import { Image, ImageBackground, Text, View } from "react-native";
 
-const TabIcon = ({ focused, title }: any) => {
+const TabIcon = ({ focused, title, icon }: any) => {
     if (focused) {
         return (
         <ImageBackground
             source={images.highlight}
-            className="flex flex-row w-full flex-1 min-w-[122px] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
+            className="flex flex-row w-full flex-1 min-w-[9.2rem] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
         >
-            <Image tintColor="#151312" className="size-5" />
-            <Text>{title}</Text>
+            <Image source={icon} className="" tintColor="#151312"/>
+            <Text className="mr-2">{title}</Text>
         </ImageBackground>
         );
     }
@@ -46,13 +46,14 @@ const _layout = () => {
             }
         }}
     >
+        
       <Tabs.Screen
         name="index"
         options={{
             title: "Home",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-                <TabIcon focused={focused} title="Home"/>
+                <TabIcon focused={focused} title="Home" icon={assets.home_c}/>
             ),
         }}
       />
@@ -62,7 +63,7 @@ const _layout = () => {
             title: "Data",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-                <TabIcon focused={focused} title="Data"/>
+                <TabIcon focused={focused} title="Data" icon={assets.data_c}/>
             ),
         }}
       />
@@ -72,7 +73,7 @@ const _layout = () => {
             title: "Profile",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-                <TabIcon focused={focused} title="Profile"/>
+                <TabIcon focused={focused} title="Profile" icon={assets.settings_c}/>
             ),
         }}
       />
