@@ -1,3 +1,4 @@
+import Slider from "@react-native-community/slider";
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -13,7 +14,10 @@ export default function Index() {
           <Text className="color-white font-bold ml-12">
             Mode 2
           </Text>
-        </View>   
+        </View>
+        <View className="justify-center items-center flex-1">
+          <Slider className="w-[16em]" minimumValue={0} maximumValue={1} minimumTrackTintColor="#FFFFFF" maximumTrackTintColor="#000000"/>
+        </View>
     </View>
   );
 }

@@ -1,23 +1,22 @@
 import { assets } from "@/assets/assets.js";
 import { images } from "@/constants/images";
 import { Tabs } from "expo-router";
-import { Image, ImageBackground, Text, View } from "react-native";
+import { Image, ImageBackground, View } from "react-native";
 
-const TabIcon = ({ focused, title, icon }: any) => {
+const TabIcon = ({ focused, cIcon, uIcon }: any) => {
     if (focused) {
         return (
         <ImageBackground
             source={images.highlight}
-            className="flex flex-row w-full flex-1 min-w-[9.2rem] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
+            className="flex flex-row flex-1 min-w-[9.2rem] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
         >
-            <Image source={icon} className="" tintColor="#151312"/>
-            <Text className="mr-2">{title}</Text>
+            <Image source={cIcon}/>
         </ImageBackground>
         );
     }
     return (
-        <View>
-            <Text className=" flex size-full justify-center items-center mt-7 rounded-full color-[#A8B5DB]">{title}</Text>
+        <View className="mt-4">
+            <Image source={uIcon}/>
         </View>
     )
 };
@@ -53,7 +52,7 @@ const _layout = () => {
             title: "Home",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-                <TabIcon focused={focused} title="Home" icon={assets.home_c}/>
+                <TabIcon focused={focused} cIcon={assets.home_c} uIcon={assets.home_u}/>
             ),
         }}
       />
@@ -63,7 +62,7 @@ const _layout = () => {
             title: "Data",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-                <TabIcon focused={focused} title="Data" icon={assets.data_c}/>
+                <TabIcon focused={focused} cIcon={assets.data_c} uIcon={assets.data_u}/>
             ),
         }}
       />
@@ -73,7 +72,7 @@ const _layout = () => {
             title: "Profile",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-                <TabIcon focused={focused} title="Profile" icon={assets.settings_c}/>
+                <TabIcon focused={focused} cIcon={assets.settings_c} uIcon={assets.settings_u}/>
             ),
         }}
       />
