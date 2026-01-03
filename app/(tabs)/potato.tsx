@@ -8,7 +8,7 @@ const potato = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Value: {value.toFixed(0)}</Text>
-      
+
       <Slider
         style={styles.slider}
         minimumValue={0}
