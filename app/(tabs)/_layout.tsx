@@ -10,7 +10,7 @@ const TabIcon = ({ focused, cIcon, uIcon }: any) => {
             source={images.highlight}
             className="flex flex-row flex-1 min-w-[9.2rem] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
         >
-            <Image source={cIcon}/>
+            <Image source={cIcon} tintColor={"blue"}/>
         </ImageBackground>
         );
     }
