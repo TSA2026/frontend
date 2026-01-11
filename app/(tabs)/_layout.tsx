@@ -76,6 +76,16 @@ const _layout = () => {
             ),
         }}
       />
+      <Tabs.Screen
+        name="test_home"
+        options={{
+            title: "Testing",
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+                <TabIcon focused={focused} cIcon={assets.home_c} uIcon={assets.home_u}/>
+            ),
+        }}
+      />
     </Tabs>
   );
 };
