@@ -24,7 +24,7 @@ export default function Index() {
               </Text>
           </View>
           {/* This marks the Mode Selection Section */}
-            <View className='w-[18em]'> 
+            <View className='w-[30em]'> 
               <View className='mt-[4.5em] items-center'>
                   <Text className='color-gray-500 opacity-[70%] font-semibold text-2xl'>
                       Selected Mode
@@ -34,7 +34,7 @@ export default function Index() {
                   </Text>
               </View>
               {/* Mode Buttons */}
-              <View className="mt-3 flex-row justify-center items-center w-[18.5em]">
+              <View className="mt-3 ml-5 items-center w-full flex flex-row flex-wrap p-4">
                 <Pressable className="border-2 border-gray-600 p-[2em] w-[12.5em] h-[6em] items-center active:opacity-75" onPress={() => setActiveMode("Conversation")}>
                     <Text className="color-white text-center font-semibold">
                         Conversation
@@ -49,6 +49,22 @@ export default function Index() {
                     </Text>
                     <Text className="color-gray-500 text-xs font-semibold">
                         Bring the silence
+                    </Text>
+                </Pressable>
+                <Pressable className="mt-4 border-2 border-gray-600 p-[2em] w-[12.5em] h-[6em] items-center active:opacity-75" onPress={() => setActiveMode("A.I.")}>
+                    <Text className="color-white text-center font-semibold">
+                        A.I.
+                    </Text>
+                    <Text className="color-gray-500 text-xs font-semibold">
+                        Does the work
+                    </Text>
+                </Pressable>
+                <Pressable className="ml-2 border-2 border-gray-600 p-[2em] w-[12.5em] h-[6em] items-center active:opacity-75" onPress={() => setActiveMode("Custom")}>
+                    <Text className="color-white text-center font-semibold">
+                        Custom
+                    </Text>
+                    <Text className="color-gray-500 text-xs font-semibold">
+                        It's your choice
                     </Text>
                 </Pressable>
               </View>
