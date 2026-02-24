@@ -15,11 +15,11 @@ export default function Index() {
       {/* Placeholder View for adjusting placement */}
         <View className='justify-center items-center w-screen  mt-[9em] mr-5'>
           {/* This marks the Bluetooth Section (WORK IN PROGRESS) */}
-          <View className='w-[18em] h-[6em] rounded-lg justify-center items-center border-white border-[0.25px] '>
+          <View className='w-[25em] h-[7em] rounded-lg justify-center items-center border-[#292828] border-[0.75px] bg-[#111010] '>
               <Text className='font-bold color-white'>
                   {deviceConnected ? 'Device Paired' : 'No device found'}
               </Text>
-              <Text className='font-bold rounded-full bg-blue-500  color-white' onPress={() => setDeviceConnected(true)}>
+              <Text className='font-bold rounded-full  color-[#85FF00]' onPress={() => setDeviceConnected(true)}>
                   {deviceConnected ? "Connected" : "Pair Device?"}
               </Text>
           </View>
@@ -35,35 +35,40 @@ export default function Index() {
               </View>
               {/* Mode Buttons */}
               <View className="mt-3 ml-5 items-center w-full flex flex-row flex-wrap p-4">
-                <Pressable className="border-2 border-gray-600 p-[2em] w-[12.5em] h-[6em] items-center active:opacity-75" onPress={() => setActiveMode("Conversation")}>
-                    <Text className="color-white text-center font-semibold">
+              <Pressable
+                className={`${activeMode === 'Conversation' ? 'bg-[#111010] border-[#7C3AED]' : 'bg-[#111010] border-[#191919]'} rounded-xl border-2 p-[2em] w-[12.5em] h-[6em]  active:opacity-75`}
+                style={activeMode === 'Conversation' ? { elevation: 10, shadowColor: '#7C3AED', shadowOpacity: 0.5, shadowRadius: 10 } : {}}
+                onPress={() => setActiveMode("Conversation")}
+                     onPress={() => setActiveMode("Conversation")}
+>
+                    <Text className="color-white text-left font-semibold ">
                         Conversation
                     </Text>
                     <Text className="color-gray-500 text-xs font-semibold">
                         Have a chat
                     </Text>
                 </Pressable>
-                <Pressable className="ml-2 border-2 border-gray-600 p-[2em] w-[12.5em] h-[6em] items-center active:opacity-75" onPress={() => setActiveMode("Noise Reduction")}>
-                    <Text className="color-white text-center font-semibold">
+                <Pressable className=" bg-[#111010] rounded-xl ml-2 border-2 border-[#191919] p-[2em] w-[12.5em] h-[6em]  active:opacity-75" onPress={() => setActiveMode("Noise Reduction")}>
+                    <Text className="color-white text-left font-semibold">
                         Noise Reduction
                     </Text>
                     <Text className="color-gray-500 text-xs font-semibold">
                         Bring the silence
                     </Text>
                 </Pressable>
-                <Pressable className="mt-4 border-2 border-gray-600 p-[2em] w-[12.5em] h-[6em] items-center active:opacity-75" onPress={() => setActiveMode("A.I.")}>
-                    <Text className="color-white text-center font-semibold">
+                <Pressable className=" bg-[#111010] rounded-xl mt-4 border-2 border-[#191919] p-[2em] w-[12.5em] h-[6em]  active:opacity-75" onPress={() => setActiveMode("A.I.")}>
+                    <Text className="color-white text-left font-semibold">
                         A.I.
                     </Text>
                     <Text className="color-gray-500 text-xs font-semibold">
                         Does the work
                     </Text>
                 </Pressable>
-                <Pressable className="ml-2 border-2 border-gray-600 p-[2em] w-[12.5em] h-[6em] items-center active:opacity-75" onPress={() => setActiveMode("Custom")}>
-                    <Text className="color-white text-center font-semibold">
+                <Pressable className=" bg-[#111010] rounded-xl ml-2 border-2 border-[#191919] p-[2em] w-[12.5em] h-[6em] active:opacity-75" onPress={() => setActiveMode("Custom")}>
+                    <Text className="color-white text-left font-semibold">
                         Custom
                     </Text>
-                    <Text className="color-gray-500 text-xs font-semibold">
+                    <Text className="color-gray-500 text-left text-xs font-semibold">
                         It's your choice
                     </Text>
                 </Pressable>
@@ -79,8 +84,8 @@ export default function Index() {
                 maximumValue={10}
                 value={valueOne}
                 onValueChange={setValueOne}
-                minimumTrackTintColor="#91fbff"
-                maximumTrackTintColor="#d3d3d3"
+                minimumTrackTintColor="#7C3AED"
+                maximumTrackTintColor="#333333"
                 >
                 </Slider>
             </View>
