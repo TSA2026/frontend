@@ -39,8 +39,8 @@ export default function Index() {
                 className={`${activeMode === 'Conversation' ? 'bg-[#111010] border-[#7C3AED]' : 'bg-[#111010] border-[#191919]'} rounded-xl border-2 p-[2em] w-[12.5em] h-[6em]  active:opacity-75`}
                 style={activeMode === 'Conversation' ? { elevation: 10, shadowColor: '#7C3AED', shadowOpacity: 0.5, shadowRadius: 10 } : {}}
                 onPress={() => setActiveMode("Conversation")}
-                     onPress={() => setActiveMode("Conversation")}
->
+                    >
+
                     <Text className="color-white text-left font-semibold ">
                         Conversation
                     </Text>
@@ -48,7 +48,15 @@ export default function Index() {
                         Have a chat
                     </Text>
                 </Pressable>
-                <Pressable className=" bg-[#111010] rounded-xl ml-2 border-2 border-[#191919] p-[2em] w-[12.5em] h-[6em]  active:opacity-75" onPress={() => setActiveMode("Noise Reduction")}>
+                
+                
+                
+                <Pressable 
+               className={`${activeMode === 'Noise Reduction' ? 'bg-[#111010] border-[#7C3AED]' : 'bg-[#111010] border-[#191919]'} rounded-xl border-2 p-[2em] w-[12.5em] h-[6em]  ml-2 active:opacity-75`}
+               style={activeMode === 'Noise Reduction' ? { elevation: 10, shadowColor: '#7C3AED', shadowOpacity: 0.5, shadowRadius: 10 } : {}}
+               onPress={() => setActiveMode("Noise Reduction")}
+                   >
+
                     <Text className="color-white text-left font-semibold">
                         Noise Reduction
                     </Text>
@@ -56,7 +64,11 @@ export default function Index() {
                         Bring the silence
                     </Text>
                 </Pressable>
-                <Pressable className=" bg-[#111010] rounded-xl mt-4 border-2 border-[#191919] p-[2em] w-[12.5em] h-[6em]  active:opacity-75" onPress={() => setActiveMode("A.I.")}>
+                <Pressable 
+                    className= {`${activeMode === 'A.I.' ? 'bg-[#111010] border-[#7C3AED]' : 'bg-[#111010] border-[#191919]'} rounded-xl border-2 p-[2em] w-[12.5em] h-[6em]  mt-2 active:opacity-75`}
+                        style={activeMode === 'A.I.' ? { elevation: 10, shadowColor: '#7C3AED', shadowOpacity: 0.5, shadowRadius: 10 } : {}}
+                            onPress={() => setActiveMode("A.I.")}
+                    >
                     <Text className="color-white text-left font-semibold">
                         A.I.
                     </Text>
@@ -64,7 +76,14 @@ export default function Index() {
                         Does the work
                     </Text>
                 </Pressable>
-                <Pressable className=" bg-[#111010] rounded-xl ml-2 border-2 border-[#191919] p-[2em] w-[12.5em] h-[6em] active:opacity-75" onPress={() => setActiveMode("Custom")}>
+                
+                
+                <Pressable 
+                
+                className={`${activeMode === 'Custom' ? 'bg-[#111010] border-[#7C3AED]' : 'bg-[#111010] border-[#191919]'} rounded-xl border-2 p-[2em] w-[12.5em] h-[6em] ml-2 active:opacity-75`}
+                style={activeMode === 'Custom' ? { elevation: 10, shadowColor: '#7C3AED', shadowOpacity: 0.5, shadowRadius: 10 } : {}}
+                onPress={() => setActiveMode("Custom")}
+                >
                     <Text className="color-white text-left font-semibold">
                         Custom
                     </Text>
