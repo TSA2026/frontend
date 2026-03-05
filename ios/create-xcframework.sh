@@ -3,7 +3,7 @@
 set -e
 
 FFTW_DIR="$HOME/Desktop/setup/fftw-ios"
-OUTPUT_DIR="$(pwd)/fftw-xcframework"
+OUTPUT_DIR="$(pwd)"
 
 echo "Creating XCFramework..."
 
