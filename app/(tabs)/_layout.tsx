@@ -6,17 +6,17 @@ import { Image, ImageBackground, View } from "react-native";
 const TabIcon = ({ focused, cIcon, uIcon }: any) => {
     if (focused) {
         return (
-        <ImageBackground
-            source={images.highlight}
-            className="flex flex-row flex-1 min-w-[9.2rem] min-h-16 mt-4 justify-center items-center rounded-full overflow-hidden"
+        <View
+    
+            className="mt-2 justify-center items-center rounded-full bg-[#7C3AED] w-10 h-10" 
         >
-            <Image source={cIcon} tintColor={"blue"}/>
-        </ImageBackground>
+            <Image source={cIcon} tintColor={"white"}/>
+        </View>
         );
     }
     return (
-        <View className="mt-4">
-            <Image source={uIcon}/>
+        <View className="mt-3">
+            <Image source={uIcon} tintColor={"white"}/>
         </View>
     )
 };
@@ -33,7 +33,7 @@ const _layout = () => {
                 alignItems: 'center',
             },
             tabBarStyle: {
-                backgroundColor: '#0f0D23',
+                backgroundColor: '#111010',
                 borderRadius: 50,
                 marginHorizontal: 20,
                 marginBottom: 36,
@@ -41,7 +41,7 @@ const _layout = () => {
                 position: 'absolute',
                 overflow: 'hidden',
                 borderWidth: 1,
-                borderColor: '0f0D23'
+                borderColor: '#191919'
             }
         }}
     >
