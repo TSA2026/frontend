@@ -10,6 +10,7 @@ export default function profile() {
 
 
   return (
+
     <ScrollView className='bg-black '>
       <Text className="text-2xl ml-5 font-extrabold color-[#85FF00] mt-[4.5em] ">
         Settings
@@ -39,7 +40,7 @@ export default function profile() {
           onPressIn={() => setPressedItem('Custom')}
           onPressOut={() => setPressedItem(null)}
           onPress={() => {console.log("Custom Pressed")
-            setAccessibilityModalVisible(true);}}>
+            setCustomModalVisible(true);}}>
 
           <Text className="color-white text-2xl font-semibold">Custom Modes</Text>
           <Text className="color-white ">{'>'}</Text>
@@ -72,6 +73,7 @@ export default function profile() {
       </View>
     </View>
       
+
     <Modal
          animationType='slide' 
         transparent={true} 
@@ -93,7 +95,28 @@ export default function profile() {
         </View>
       </Modal>
 
+    <Modal
+        animationType='slide' 
+        transparent={true} 
+        visible={customModalVisible} 
+        onRequestClose={() => {setCustomModalVisible(false)}}>
+ 
+        <View className="flex-1 justify-center items-center mt-[6em] "
+            style={{ pointerEvents: 'box-none' }}>
+          <View className="w-[28em] h-[45em] bg-[#0e0e0e] border-[#191919]' border-2 rounded-lg mb-10">
+         
+        <Pressable onPress={() => {setCustomModalVisible(false)}}>
+            <Text className='color-[#85FF00] h-[23] w-[23] text-right ml-4'>
+              x
+            </Text>
+        </Pressable>
 
+       < Text className="color-white p-2">
+              This is a software that automatically adjust audio dependent on the selected mode. Lots of fine tuning had gone into this.
+          </Text>
+        </View>
+      </View>
+    </Modal>
 
       <Modal animationType='slide' transparent={true} visible={aboutModalVisible} onRequestClose={() => {setAboutModalVisible(!aboutModalVisible)}}>
         <View className="flex-1 justify-center items-center mt-[8em]">
@@ -112,28 +135,7 @@ export default function profile() {
 
 
 
-      <Modal
-         animationType='slide' 
-        transparent={true} 
-        visible={customModalVisible} 
-        onRequestClose={() => {setCustomModalVisible(false)}}>
-          
-        <View className="flex-1 justify-center items-center mt-[8em] "
-        style={{ pointerEvents: 'box-none' }}>
-          <View className='rounded-lg w-[25em] h-[40em] bg-black'>
-            <Text className="color-white p-2">
-              This is a software that automatically adjust audio dependent on the selected mode. Lots of fine tuning had gone into this.
-            </Text>
-            <Pressable onPress={() => {setCustomModalVisible(false)}}>
-              <Text className='color-[#85FF00] text-center'>
-                Close
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
- 
-
+     
 
 
       <Modal
@@ -158,5 +160,10 @@ export default function profile() {
       </Modal>
  
     </ScrollView>
+
+      
+
+
+
   )
 }
