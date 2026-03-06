@@ -2,7 +2,7 @@ import React from "react";
 import { ScrollView, Text, View } from "react-native";
 import { useAudioEngine } from "../../hooks/useAudioEngine";
 
-export const Data = () => {
+const Data = () => {
   const { telemetry, isCalibrated, isRunning } = useAudioEngine();
 
   return (
@@ -73,4 +73,6 @@ export const Data = () => {
       <View className="h-20" />
     </ScrollView>
   )
-}
+};
+
+export default Data;

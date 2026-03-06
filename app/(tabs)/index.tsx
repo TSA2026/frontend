@@ -1,11 +1,11 @@
 import Slider from "@react-native-community/slider";
 import { useState } from "react";
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   Text,
   View,
-  ActivityIndicator,
 } from "react-native";
 import { useAudioEngine } from "../../hooks/useAudioEngine";
 
