@@ -1,5 +1,6 @@
 import {useState, useEffect, useCallback} from 'react';
-import {AudioEngine, Telemetry} from '../services/AudioEngineNative';
+// import {AudioEngine, Telemetry} from '../services/AudioEngineNative';
+import { AudioEngine, Telemetry } from '../services/AudioEngineAdapter';
 import { PermissionsAndroid, Platform } from 'react-native';
 
 type Mode = 'quiet' | 'conversation' | 'noisy';
@@ -8,7 +9,7 @@ export function useAudioEngine() {
   const [isRunning, setIsRunning] = useState(false);
   const [currentMode, setCurrentMode] = useState<Mode>('conversation');
   const [telemetry, setTelemetry] = useState<Telemetry | null>(null);
-  const [isCalibrated, setIsCalibrated] = useState(false);
+  const [isCalibrated, setIsCalibrated] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const requestPermissions = async (): Promise<boolean> => {

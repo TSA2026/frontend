@@ -1,9 +1,18 @@
 import React from "react";
 import { ScrollView, Text, View } from "react-native";
-import { useAudioEngine } from "../../hooks/useAudioEngine";
+import { useAudioEngineContext } from '../../context/AudioEngineContext';
 
+<<<<<<< Updated upstream
 const Data = () => {
   const { telemetry, isCalibrated, isRunning } = useAudioEngine();
+=======
+export default function Data () {
+  const { telemetry, isCalibrated, isRunning } = useAudioEngineContext();
+
+  console.log('IsRunnning:', isRunning);
+  console.log('IsCalibrated:', isCalibrated);
+  console.log('Telemetry:', telemetry);
+>>>>>>> Stashed changes
 
   return (
     <ScrollView className="bg-black">
@@ -55,7 +64,7 @@ const Data = () => {
             </Text>
             {telemetry.bandGains.map((gain, i) => (
               <Text key={i} className="color-gray-400 text-sm">
-                Band (i + 1): {gain.toFixed(2)}x
+                Band {i + 1}: {gain.toFixed(2)}x
               </Text>
             ))}
           </View>
