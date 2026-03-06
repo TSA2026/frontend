@@ -4,6 +4,7 @@ import { Image, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const TabIcon = ({ focused, cIcon, uIcon }: any) => {
     if (focused) {
         return (
@@ -21,6 +22,8 @@ const TabIcon = ({ focused, cIcon, uIcon }: any) => {
         </View>
     )
 =======
+=======
+>>>>>>> Stashed changes
 const TabIcon = ({ focused, icon, label }: { focused: boolean; icon: any; label: string }) => {
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center', minWidth: 80 }}>
@@ -55,12 +58,16 @@ const TabIcon = ({ focused, icon, label }: { focused: boolean; icon: any; label:
       </Text>
     </View>
   );
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 };
 
 const _layout = () => {
   return (
     <Tabs
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         screenOptions={{
             tabBarShowLabel: false,
@@ -83,6 +90,8 @@ const _layout = () => {
             }
         }}
 =======
+=======
+>>>>>>> Stashed changes
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -100,6 +109,9 @@ const _layout = () => {
         },
         headerShown: false,
       }}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     >
       <Tabs.Screen
@@ -136,6 +148,7 @@ const _layout = () => {
         options={{
           href: null,
           tabBarStyle: { display: 'none' },
+<<<<<<< Updated upstream
         }}
       />
 <<<<<<< Updated upstream
@@ -149,6 +162,25 @@ const _layout = () => {
       />
       <Tabs.Screen
         name="accessibility"
+=======
+        }}
+      />
+      <Tabs.Screen
+        name="account"
+>>>>>>> Stashed changes
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+        }}
+      />
+      <Tabs.Screen
+<<<<<<< Updated upstream
+        name="about"
+        options={{
+          href: null,
+          tabBarStyle: { display: 'none' },
+=======
+        name="accessibility"
         options={{
           href: null,
           tabBarStyle: { display: 'none' },
@@ -159,6 +191,7 @@ const _layout = () => {
         options={{
           href: null,
           tabBarStyle: { display: 'none' },
+>>>>>>> Stashed changes
         }}
       />
 >>>>>>> Stashed changes

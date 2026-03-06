@@ -3,15 +3,21 @@ import { ScrollView, Text, View } from "react-native";
 import { useAudioEngineContext } from '../../context/AudioEngineContext';
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const Data = () => {
   const { telemetry, isCalibrated, isRunning } = useAudioEngine();
 =======
+=======
+>>>>>>> Stashed changes
 export default function Data () {
   const { telemetry, isCalibrated, isRunning } = useAudioEngineContext();
 
   console.log('IsRunnning:', isRunning);
   console.log('IsCalibrated:', isCalibrated);
   console.log('Telemetry:', telemetry);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
   return (
