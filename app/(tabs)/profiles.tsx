@@ -20,6 +20,8 @@ import {
   CustomParams
 } from '../../services/profileService';
 import Slider from '@react-native-community/slider';
+import AudioEngineNative from '../../services/AudioEngineNative';
+
 
 export default function Profiles() {
   const router = useRouter();
@@ -145,15 +147,41 @@ export default function Profiles() {
   };
 
   const handleApplyProfile = async (profile: AudioProfile) => {
-    if (!token) return;
+  if (!token) return;
+  
+  try {
+    // 1. Mark as active in backend
+    await profileService.applyProfile(token, profile.profile_id);
     
-    try {
-      await profileService.applyProfile(token, profile.profile_id);
-      Alert.alert('Success', `Applied "${profile.name}" to audio engine`);
-    } catch (error: any) {
-      Alert.alert('Error', error.message);
+    // 2. Apply to ACTUAL audio engine
+    if (profile.custom_params) {
+      await AudioEngineNative.applyCustomParams({
+        noise_threshold_db: profile.custom_params.noise_threshold_db,
+        gate_floor_db: profile.custom_params.gate_floor_db,
+        gate_smoothing: profile.custom_params.gate_smoothing,
+        hf_emphasis_db: profile.custom_params.hf_emphasis_db,
+        band_targets: profile.custom_params.band_targets,
+        band_max_gains: profile.custom_params.band_max_gains,
+      });
+      
+      Alert.alert(
+        'Success', 
+        `✅ Applied "${profile.name}"\n\n` +
+        `Noise Threshold: ${profile.custom_params.noise_threshold_db}dB\n` +
+        `HF Boost: ${profile.custom_params.hf_emphasis_db}dB`
+      );
+    } else {
+      // Fallback to preset mode
+      await AudioEngineNative.setMode(profile.mode);
+      Alert.alert('Success', `Applied "${profile.name}" (${profile.mode} mode)`);
     }
-  };
+    
+    await loadProfiles();
+    
+  } catch (error: any) {
+    Alert.alert('Error', error.message || 'Failed to apply profile');
+  }
+};
 
   if (loading) {
     return (

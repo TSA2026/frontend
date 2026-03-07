@@ -13,6 +13,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
 import { Ionicons } from '@expo/vector-icons';
+import { getApiUrl } from '@/config/env';
+
 
 export default function AccountScreen() {
   const { user, logout, token } = useAuth();
@@ -41,7 +43,7 @@ export default function AccountScreen() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://192.168.1.100:8000/api/auth/change-password', {
+      const response = await fetch(getApiUrl('/api/auth/change-password'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

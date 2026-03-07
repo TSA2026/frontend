@@ -148,7 +148,7 @@ export default function AccessibilityScreen() {
       <View style={styles.headerBar}>
         <TouchableOpacity 
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.push("/settings")}
         >
           <Ionicons name="chevron-back" size={28} color="#007AFF" />
           <Text style={styles.backText}>Settings</Text>
