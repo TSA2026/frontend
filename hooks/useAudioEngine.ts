@@ -1,9 +1,17 @@
 import {useState, useEffect, useCallback} from 'react';
-// import {AudioEngine, Telemetry} from '../services/AudioEngineNative';
 import { AudioEngine, Telemetry } from '../services/AudioEngineAdapter';
 import { PermissionsAndroid, Platform } from 'react-native';
 
 type Mode = 'quiet' | 'conversation' | 'noisy';
+
+export interface CustomDSPParams {
+  noise_threshold_db: number;
+  gate_floor_db: number;
+  gate_smoothing: number;
+  hf_emphasis_db: number;
+  band_targets: number[];
+  band_max_gains: number[];
+}
 
 export function useAudioEngine() {
   const [isRunning, setIsRunning] = useState(false);
@@ -19,7 +27,7 @@ export function useAudioEngine() {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
         {
-          title: 'Microphone Permsission',
+          title: 'Microphone Permission',
           message: 'This app needs access to your microphone for audio processing',
           buttonNeutral: 'Ask Me Later',
           buttonNegative: 'Cancel',
@@ -91,6 +99,18 @@ export function useAudioEngine() {
     }
   }, []);
 
+  const applyCustomParams = useCallback(async (params: CustomDSPParams) => {
+    try {
+      setError(null);
+      await AudioEngine.applyCustomParams(params);
+      console.log('✅ Custom DSP params applied:', params);
+    } catch (e: any) {
+      setError(e.message || 'Failed to apply custom parameters');
+      console.error('Custom params error:', e);
+      throw e;
+    }
+  }, []);
+
   useEffect(() => {
     return () => {
       if (isRunning) {
@@ -111,5 +131,6 @@ export function useAudioEngine() {
     start,
     stop,
     setMode,
+    applyCustomParams,
   };
 }
