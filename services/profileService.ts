@@ -9,12 +9,12 @@ const API_BASE_URL = __DEV__ ? 'http://192.168.1.86:8000' : 'YOUR_PRODUCTION_URL
 export type ProcessingMode = 'quiet' | 'conversation' | 'noisy';
 
 export interface CustomParams {
-  noise_threshold_db?: number;
-  gate_floor_db?: number;
-  gate_smoothing?: number;
-  hf_emphasis_db?: number;
-  band_targets?: number[];
-  band_max_gains?: number[];
+  noise_threshold_db: number;
+  gate_floor_db: number;
+  gate_smoothing: number;
+  hf_emphasis_db: number;
+  band_targets: number[];
+  band_max_gains: number[];
   [key: string]: any;
 }
 

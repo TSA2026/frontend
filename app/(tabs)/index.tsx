@@ -1,5 +1,5 @@
 import Slider from "@react-native-community/slider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -10,6 +10,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAudioEngineContext } from '../../context/AudioEngineContext';
+import { profileService, AudioProfile } from '../../services/profileService';
+import { useAuth } from '../../context/AuthContext';
+import { router } from "expo-router";
+
+import {TutorialModal} from "@/components/TutorialModel";
+import { useFirstTimeUser } from "@/hooks/useFirstTimeUser";
 
 export default function Index() {
   const {
@@ -26,6 +32,49 @@ export default function Index() {
   const [activeMode, setActiveMode] = useState("Conversation");
   const [valueOne, setValueOne] = useState(1);
 
+  const { user, token } = useAuth();
+  const [activeProfile, setActiveProfile] = useState<AudioProfile | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+
+  const {isFirstTime, markTutorialSeen} = useFirstTimeUser();
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  useEffect(() => {
+    if (isFirstTime) {
+      setShowTutorial(true);
+    }
+  }, [isFirstTime]);
+
+  const handleTutorialClose = () => {
+    setShowTutorial(false);
+    markTutorialSeen();
+  };
+
+  useEffect(() => {
+    loadActiveProfile();
+  }, []);
+
+const loadActiveProfile = async () => {
+  if (!token) return;
+  
+  try {
+    setLoadingProfile(true);
+    const profiles = await profileService.getProfiles(token);
+    
+    // Find default profile
+    const active = profiles.find(p => p.is_default);
+    
+    if (active) {
+      setActiveProfile(active);
+      console.log('✅ Loaded active profile:', active.name);
+    }
+  } catch (error) {
+    console.error('Failed to load active profile:', error);
+  } finally {
+    setLoadingProfile(false);
+  }
+};
+
   const handleModeChange = async (uiMode: string) => {
     setActiveMode(uiMode);
 
@@ -41,205 +90,264 @@ export default function Index() {
     }
   };
 
+
   return (
-    <SafeAreaView className="flex-1 bg-black" edges={['top']}>
-      <ScrollView className="flex-1 bg-black">
-        <View className="px-5 pt-5">
-          {/* Error Display */}
-          {error && (
-            <View className="bg-red-900 rounded-xl p-4 mb-4 flex-row items-center gap-3">
-              <Ionicons name="alert-circle" size={24} color="#FFF" />
-              <Text className="color-white font-semibold flex-1">Error: {error}</Text>
-            </View>
-          )}
-
-          {/* Engine Status Card */}
-          <View className="bg-[#1C1C1E] rounded-xl p-5 mb-4">
-            <View className="flex-row items-center mb-4">
-              <Ionicons 
-                name={isRunning ? "radio-button-on" : "radio-button-off"} 
-                size={28} 
-                color={isRunning ? "#34C759" : "#666"} 
-              />
-              <Text className="color-white text-xl font-bold ml-3">
-                {isRunning ? "Engine Running" : "Engine Stopped"}
-              </Text>
-            </View>
-
-            {isRunning && !isCalibrated && (
-              <View className="flex-row items-center mb-4">
-                <ActivityIndicator size="small" color="#007AFF" />
-                <Text className="color-gray-400 ml-3 text-sm">Calibrating noise floor...</Text>
+    <>
+      {showTutorial && (
+        <TutorialModal visible={showTutorial} onClose={handleTutorialClose} />
+      )}
+      <SafeAreaView className="flex-1 bg-black" edges={['top']}>
+        <ScrollView className="flex-1 bg-black">
+          <View className="px-5 pt-5">
+            {/* Error Display */}
+            {error && (
+              <View className="bg-red-900 rounded-xl p-4 mb-4 flex-row items-center gap-3">
+                <Ionicons name="alert-circle" size={24} color="#FFF" />
+                <Text className="color-white font-semibold flex-1">Error: {error}</Text>
               </View>
             )}
 
-            {isRunning && isCalibrated && (
-              <View className="flex-row items-center mb-4">
-                <Ionicons name="checkmark-circle" size={20} color="#34C759" />
-                <Text className="color-green-400 ml-2 font-medium">Calibrated & Ready</Text>
+            {/* Active Profile Card */}
+            {activeProfile && (
+              <View className="bg-[#1C3D5A] rounded-xl p-4 mb-4 border-2 border-[#007AFF]">
+                <View className="flex-row items-center justify-between mb-2">
+                  <View className="flex-row items-center gap-2">
+                    <Ionicons name="musical-note" size={20} color="#007AFF" />
+                    <Text className="color-white text-sm font-semibold">
+                      ACTIVE PROFILE
+                    </Text>
+                  </View>
+                  <Pressable
+                    onPress={() => router.push('/profiles')}
+                    className="active:opacity-70"
+                  >
+                    <Text className="color-[#007AFF] text-sm">Change</Text>
+                  </Pressable>
+                </View>
+                <Text className="color-white text-xl font-bold mb-1">
+                  {activeProfile.name}
+                </Text>
+                {activeProfile.description && (
+                  <Text className="color-gray-400 text-sm mb-2">
+                    {activeProfile.description}
+                  </Text>
+                )}
+                <View className="flex-row gap-3 flex-wrap">
+                  <View className="bg-[#2C2C2E] rounded-md px-2 py-1">
+                    <Text className="color-gray-400 text-xs">
+                      Mode: <Text className="color-white capitalize">{activeProfile.mode}</Text>
+                    </Text>
+                  </View>
+                  {activeProfile.custom_params && (
+                    <>
+                      <View className="bg-[#2C2C2E] rounded-md px-2 py-1">
+                        <Text className="color-gray-400 text-xs">
+                          Noise: <Text className="color-white">
+                            {activeProfile.custom_params.noise_threshold_db}dB
+                          </Text>
+                        </Text>
+                      </View>
+                      <View className="bg-[#2C2C2E] rounded-md px-2 py-1">
+                        <Text className="color-gray-400 text-xs">
+                          HF: <Text className="color-white">
+                            {activeProfile.custom_params.hf_emphasis_db}dB
+                          </Text>
+                        </Text>
+                      </View>
+                    </>
+                  )}
+                </View>
               </View>
             )}
 
-            <Pressable
-              className={`rounded-xl p-4 flex-row items-center justify-center gap-2 ${
-                isRunning ? "bg-red-500" : "bg-[#007AFF]"
-              } active:opacity-75`}
-              onPress={isRunning ? stop : start}
-            >
-              <Ionicons name={isRunning ? "stop" : "play"} size={20} color="#FFF" />
-              <Text className="color-white font-bold text-lg">
-                {isRunning ? "Stop Engine" : "Start Engine"}
-              </Text>
-            </Pressable>
-          </View>
-
-          {/* Telemetry Card */}
-          {telemetry && (
+            {/* Engine Status Card */}
             <View className="bg-[#1C1C1E] rounded-xl p-5 mb-4">
-              <Text className="color-white text-lg font-semibold mb-4">Live Statistics</Text>
-              <View className="flex-row justify-between">
-                <View className="items-center flex-1">
-                  <Text className="color-gray-400 text-xs mb-2">SNR</Text>
-                  <Text className="color-white text-2xl font-bold">
-                    {telemetry.snrDb.toFixed(1)}
-                  </Text>
-                  <Text className="color-gray-500 text-xs">dB</Text>
+              <View className="flex-row items-center mb-4">
+                <Ionicons 
+                  name={isRunning ? "radio-button-on" : "radio-button-off"} 
+                  size={28} 
+                  color={isRunning ? "#34C759" : "#666"} 
+                />
+                <Text className="color-white text-xl font-bold ml-3">
+                  {isRunning ? "Engine Running" : "Engine Stopped"}
+                </Text>
+              </View>
+
+              {isRunning && !isCalibrated && (
+                <View className="flex-row items-center mb-4">
+                  <ActivityIndicator size="small" color="#007AFF" />
+                  <Text className="color-gray-400 ml-3 text-sm">Calibrating noise floor...</Text>
                 </View>
-                <View className="items-center flex-1">
-                  <Text className="color-gray-400 text-xs mb-2">Speech</Text>
-                  <Text className="color-white text-2xl font-bold">
-                    {(telemetry.speechActive * 100).toFixed(0)}
-                  </Text>
-                  <Text className="color-gray-500 text-xs">%</Text>
+              )}
+
+              {isRunning && isCalibrated && (
+                <View className="flex-row items-center mb-4">
+                  <Ionicons name="checkmark-circle" size={20} color="#34C759" />
+                  <Text className="color-green-400 ml-2 font-medium">Calibrated & Ready</Text>
                 </View>
-                <View className="items-center flex-1">
-                  <Text className="color-gray-400 text-xs mb-2">AGC Gain</Text>
-                  <Text className="color-white text-2xl font-bold">
-                    {telemetry.avgAgcGain.toFixed(2)}
-                  </Text>
-                  <Text className="color-gray-500 text-xs">x</Text>
+              )}
+
+              <Pressable
+                className={`rounded-xl p-4 flex-row items-center justify-center gap-2 ${
+                  isRunning ? "bg-red-500" : "bg-[#007AFF]"
+                } active:opacity-75`}
+                onPress={isRunning ? stop : start}
+              >
+                <Ionicons name={isRunning ? "stop" : "play"} size={20} color="#FFF" />
+                <Text className="color-white font-bold text-lg">
+                  {isRunning ? "Stop Engine" : "Start Engine"}
+                </Text>
+              </Pressable>
+            </View>
+
+            {/* Telemetry Card */}
+            {telemetry && (
+              <View className="bg-[#1C1C1E] rounded-xl p-5 mb-4">
+                <Text className="color-white text-lg font-semibold mb-4">Live Statistics</Text>
+                <View className="flex-row justify-between">
+                  <View className="items-center flex-1">
+                    <Text className="color-gray-400 text-xs mb-2">SNR</Text>
+                    <Text className="color-white text-2xl font-bold">
+                      {telemetry.snrDb.toFixed(1)}
+                    </Text>
+                    <Text className="color-gray-500 text-xs">dB</Text>
+                  </View>
+                  <View className="items-center flex-1">
+                    <Text className="color-gray-400 text-xs mb-2">Speech</Text>
+                    <Text className="color-white text-2xl font-bold">
+                      {(telemetry.speechActive * 100).toFixed(0)}
+                    </Text>
+                    <Text className="color-gray-500 text-xs">%</Text>
+                  </View>
+                  <View className="items-center flex-1">
+                    <Text className="color-gray-400 text-xs mb-2">AGC Gain</Text>
+                    <Text className="color-white text-2xl font-bold">
+                      {telemetry.avgAgcGain.toFixed(2)}
+                    </Text>
+                    <Text className="color-gray-500 text-xs">x</Text>
+                  </View>
                 </View>
               </View>
+            )}
+
+            {/* Mode Selection Header */}
+            <View className="items-center my-6">
+              <Text className="color-gray-500 text-sm font-medium mb-2">
+                SELECTED MODE
+              </Text>
+              <Text className="color-white text-3xl font-bold mb-1">
+                {activeMode}
+              </Text>
+              <Text className="color-gray-600 text-xs">
+                Engine: {currentMode}
+              </Text>
             </View>
-          )}
 
-          {/* Mode Selection Header */}
-          <View className="items-center my-6">
-            <Text className="color-gray-500 text-sm font-medium mb-2">
-              SELECTED MODE
-            </Text>
-            <Text className="color-white text-3xl font-bold mb-1">
-              {activeMode}
-            </Text>
-            <Text className="color-gray-600 text-xs">
-              Engine: {currentMode}
-            </Text>
+            {/* Mode Buttons Grid */}
+            <View className="flex-row flex-wrap justify-between mb-5">
+              <Pressable
+                className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
+                  activeMode === "Conversation" 
+                    ? "border-[#007AFF] bg-[#1C3D5A]" 
+                    : "border-[#2C2C2E] bg-[#1C1C1E]"
+                } active:opacity-70`}
+                onPress={() => handleModeChange("Conversation")}
+              >
+                <Ionicons 
+                  name="people" 
+                  size={32} 
+                  color={activeMode === "Conversation" ? "#007AFF" : "#666"} 
+                />
+                <Text className={`text-lg font-semibold mt-3 ${
+                  activeMode === "Conversation" ? "color-[#007AFF]" : "color-white"
+                }`}>
+                  Conversation
+                </Text>
+                <Text className="color-gray-500 text-xs mt-1">Have a chat</Text>
+              </Pressable>
+
+              <Pressable
+                className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
+                  activeMode === "Noise Reduction" 
+                    ? "border-[#007AFF] bg-[#1C3D5A]" 
+                    : "border-[#2C2C2E] bg-[#1C1C1E]"
+                } active:opacity-70`}
+                onPress={() => handleModeChange("Noise Reduction")}
+              >
+                <Ionicons 
+                  name="volume-mute" 
+                  size={32} 
+                  color={activeMode === "Noise Reduction" ? "#007AFF" : "#666"} 
+                />
+                <Text className={`text-lg font-semibold mt-3 ${
+                  activeMode === "Noise Reduction" ? "color-[#007AFF]" : "color-white"
+                }`}>
+                  Quiet Mode
+                </Text>
+                <Text className="color-gray-500 text-xs mt-1">Bring silence</Text>
+              </Pressable>
+
+              <Pressable
+                className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
+                  activeMode === "A.I." 
+                    ? "border-[#007AFF] bg-[#1C3D5A]" 
+                    : "border-[#2C2C2E] bg-[#1C1C1E]"
+                } active:opacity-70`}
+                onPress={() => handleModeChange("A.I.")}
+              >
+                <Ionicons 
+                  name="bulb" 
+                  size={32} 
+                  color={activeMode === "A.I." ? "#007AFF" : "#666"} 
+                />
+                <Text className={`text-lg font-semibold mt-3 ${
+                  activeMode === "A.I." ? "color-[#007AFF]" : "color-white"
+                }`}>
+                  Noisy Mode
+                </Text>
+                <Text className="color-gray-500 text-xs mt-1">Max clarity</Text>
+              </Pressable>
+
+              <Pressable
+                className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
+                  activeMode === "Custom" 
+                    ? "border-[#007AFF] bg-[#1C3D5A]" 
+                    : "border-[#2C2C2E] bg-[#1C1C1E]"
+                } active:opacity-70`}
+                onPress={() => setActiveMode("Custom")}
+              >
+                <Ionicons 
+                  name="settings" 
+                  size={32} 
+                  color={activeMode === "Custom" ? "#007AFF" : "#666"} 
+                />
+                <Text className={`text-lg font-semibold mt-3 ${
+                  activeMode === "Custom" ? "color-[#007AFF]" : "color-white"
+                }`}>
+                  Custom
+                </Text>
+                <Text className="color-gray-500 text-xs mt-1">Your choice</Text>
+              </Pressable>
+            </View>
+
+            {/* Stereo Slider */}
+            <View className="bg-[#1C1C1E] rounded-xl p-5 mb-24">
+              <Text className="color-white text-center text-lg font-semibold mb-3">
+                Stereo Adjustment: {valueOne.toFixed(0)}dB
+              </Text>
+              <Slider
+                minimumValue={-10}
+                maximumValue={10}
+                value={valueOne}
+                onValueChange={setValueOne}
+                minimumTrackTintColor="#007AFF"
+                maximumTrackTintColor="#3A3A3C"
+                thumbTintColor="#FFF"
+              />
+            </View>
           </View>
-
-          {/* Mode Buttons Grid */}
-          <View className="flex-row flex-wrap justify-between mb-5">
-            <Pressable
-              className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
-                activeMode === "Conversation" 
-                  ? "border-[#007AFF] bg-[#1C3D5A]" 
-                  : "border-[#2C2C2E] bg-[#1C1C1E]"
-              } active:opacity-70`}
-              onPress={() => handleModeChange("Conversation")}
-            >
-              <Ionicons 
-                name="people" 
-                size={32} 
-                color={activeMode === "Conversation" ? "#007AFF" : "#666"} 
-              />
-              <Text className={`text-lg font-semibold mt-3 ${
-                activeMode === "Conversation" ? "color-[#007AFF]" : "color-white"
-              }`}>
-                Conversation
-              </Text>
-              <Text className="color-gray-500 text-xs mt-1">Have a chat</Text>
-            </Pressable>
-
-            <Pressable
-              className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
-                activeMode === "Noise Reduction" 
-                  ? "border-[#007AFF] bg-[#1C3D5A]" 
-                  : "border-[#2C2C2E] bg-[#1C1C1E]"
-              } active:opacity-70`}
-              onPress={() => handleModeChange("Noise Reduction")}
-            >
-              <Ionicons 
-                name="volume-mute" 
-                size={32} 
-                color={activeMode === "Noise Reduction" ? "#007AFF" : "#666"} 
-              />
-              <Text className={`text-lg font-semibold mt-3 ${
-                activeMode === "Noise Reduction" ? "color-[#007AFF]" : "color-white"
-              }`}>
-                Quiet Mode
-              </Text>
-              <Text className="color-gray-500 text-xs mt-1">Bring silence</Text>
-            </Pressable>
-
-            <Pressable
-              className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
-                activeMode === "A.I." 
-                  ? "border-[#007AFF] bg-[#1C3D5A]" 
-                  : "border-[#2C2C2E] bg-[#1C1C1E]"
-              } active:opacity-70`}
-              onPress={() => handleModeChange("A.I.")}
-            >
-              <Ionicons 
-                name="bulb" 
-                size={32} 
-                color={activeMode === "A.I." ? "#007AFF" : "#666"} 
-              />
-              <Text className={`text-lg font-semibold mt-3 ${
-                activeMode === "A.I." ? "color-[#007AFF]" : "color-white"
-              }`}>
-                Noisy Mode
-              </Text>
-              <Text className="color-gray-500 text-xs mt-1">Max clarity</Text>
-            </Pressable>
-
-            <Pressable
-              className={`w-[48%] mb-3 rounded-xl p-5 items-center border-2 ${
-                activeMode === "Custom" 
-                  ? "border-[#007AFF] bg-[#1C3D5A]" 
-                  : "border-[#2C2C2E] bg-[#1C1C1E]"
-              } active:opacity-70`}
-              onPress={() => setActiveMode("Custom")}
-            >
-              <Ionicons 
-                name="settings" 
-                size={32} 
-                color={activeMode === "Custom" ? "#007AFF" : "#666"} 
-              />
-              <Text className={`text-lg font-semibold mt-3 ${
-                activeMode === "Custom" ? "color-[#007AFF]" : "color-white"
-              }`}>
-                Custom
-              </Text>
-              <Text className="color-gray-500 text-xs mt-1">Your choice</Text>
-            </Pressable>
-          </View>
-
-          {/* Stereo Slider */}
-          <View className="bg-[#1C1C1E] rounded-xl p-5 mb-24">
-            <Text className="color-white text-center text-lg font-semibold mb-3">
-              Stereo Adjustment: {valueOne.toFixed(0)}dB
-            </Text>
-            <Slider
-              minimumValue={-10}
-              maximumValue={10}
-              value={valueOne}
-              onValueChange={setValueOne}
-              minimumTrackTintColor="#007AFF"
-              maximumTrackTintColor="#3A3A3C"
-              thumbTintColor="#FFF"
-            />
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 }
