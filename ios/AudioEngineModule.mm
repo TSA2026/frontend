@@ -82,5 +82,46 @@ RCT_EXPORT_METHOD(isCalibrated:(RCTPromiseResolveBlock)resolve
     [processor cleanup];
     processor = nil;
 }
+RCT_EXPORT_METHOD(applyCustomParams:(NSDictionary *)params
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject)
+{
+  if (!processor) {
+    processor = [[RealtimeAudioProcessor alloc] init];
+  }
+  
+  // Extract parameters
+  float noiseThresholdDb = [params[@"noiseThresholdDb"] floatValue];
+  float gateFloorDb = [params[@"gateFloorDb"] floatValue];
+  float gateSmoothing = [params[@"gateSmoothing"] floatValue];
+  float hfEmphasisDb = [params[@"hfEmphasisDb"] floatValue];
+  NSArray *bandTargets = params[@"bandTargets"];
+  NSArray *bandMaxGains = params[@"bandMaxGains"];
+  
+  NSLog(@"📊 Applying custom DSP params:");
+  NSLog(@"   Noise Threshold: %.1f dB", noiseThresholdDb);
+  NSLog(@"   Gate Floor: %.1f dB", gateFloorDb);
+  NSLog(@"   Gate Smoothing: %.2f", gateSmoothing);
+  NSLog(@"   HF Emphasis: %.1f dB", hfEmphasisDb);
+  
+  // Convert to C arrays
+  float bandTargetsArray[6];
+  float bandMaxGainsArray[6];
+  
+  for (int i = 0; i < 6; i++) {
+    bandTargetsArray[i] = [bandTargets[i] floatValue];
+    bandMaxGainsArray[i] = [bandMaxGains[i] floatValue];
+  }
+  
+  // Apply to processor
+  [processor applyCustomParamsWithNoiseThreshold:noiseThresholdDb
+                                       gateFloor:gateFloorDb
+                                    gateSmoothing:gateSmoothing
+                                      hfEmphasis:hfEmphasisDb
+                                     bandTargets:bandTargetsArray
+                                    bandMaxGains:bandMaxGainsArray];
+  
+  resolve(@YES);
+}
 
 @end

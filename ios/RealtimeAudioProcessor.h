@@ -18,10 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cleanup;
 - (void)applyCustomParamsWithNoiseThreshold:(float)noiseThresholdDb
                                   gateFloor:(float)gateFloorDb
-                              gateSmoothing:(float)gateSmoothing
+                               gateSmoothing:(float)gateSmoothing
                                  hfEmphasis:(float)hfEmphasisDb
-                                bandTargets:(nullable float *)bandTargets
-                               bandMaxGains:(nullable float *)bandMaxGains;
+                                bandTargets:(float *)bandTargets
+                               bandMaxGains:(float *)bandMaxGains;
 
 @end
 
