@@ -10,7 +10,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useRouter, useSegments } from 'expo-router';
 
 // const API_BASE_URL = __DEV__ ? 'http://localhost:8000' : 'YOUR_PRODUCTION_URL';
-const API_BASE_URL = __DEV__ ? 'http://192.168.1.86:8000' : 'YOUR_PRODUCTION_URL';
+const API_BASE_URL = __DEV__ ? 'http://192.168.1.100:8000' : 'YOUR_PRODUCTION_URL';
 
 interface User {
   username: string;

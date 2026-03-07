@@ -1,4 +1,4 @@
-const API_BASE_URL = __DEV__ ? 'http://localhost:8000/api' : '...'
+const API_BASE_URL = __DEV__ ? 'http://192.168.1.100:8000/api' : '...'
 
 export type ProcessingMode = 'quiet' | 'conversation' | 'noisy';
 

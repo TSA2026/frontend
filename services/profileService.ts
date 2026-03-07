@@ -4,7 +4,7 @@
  * API service for managing audio profiles
  */
 
-const API_BASE_URL = __DEV__ ? 'http://192.168.1.86:8000' : 'YOUR_PRODUCTION_URL';
+const API_BASE_URL = __DEV__ ? 'http://192.168.1.100:8000' : 'YOUR_PRODUCTION_URL';
 
 export type ProcessingMode = 'quiet' | 'conversation' | 'noisy';
 

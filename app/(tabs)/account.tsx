@@ -41,7 +41,7 @@ export default function AccountScreen() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://192.168.1.147:8000/api/auth/change-password', {
+      const response = await fetch('http://192.168.1.100:8000/api/auth/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
